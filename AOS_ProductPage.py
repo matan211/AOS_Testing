@@ -25,7 +25,7 @@ class ProductPage:
     def click_add_to_cart(self):
         self.add_to_cart().click()
 
-    def get_price(self):
+    def get_price_of_one_unit(self):
         price = self.driver.find_element(By.CSS_SELECTOR, "div[id='Description']>h2.roboto-thin").text[1:]
         return Decimal(price)
 
@@ -39,6 +39,31 @@ class ProductPage:
     def get_total_price(self):
         self.hover_cart_button()
         elements_list = self.driver.find_elements(By.CSS_SELECTOR, "td>span.roboto-medium")
-        return Decimal(elements_list[1].text[1:])
+        total_price = elements_list[1].text[1:]
+        if total_price[1] == ',':
+            total_price = total_price[0]+total_price[2:]
+        return Decimal(total_price)
+
+    def get_product_name(self,index):
+        self.hover_cart_button()
+        products_list = self.driver.find_elements(By.CSS_SELECTOR, "a>h3.ng-binding")
+        return products_list[index].text
+
+    def get_color_name(self, index):
+        self.hover_cart_button()
+        products_list = self.driver.find_elements(By.CSS_SELECTOR, "label.ng-binding>span.ng-binding")
+        return products_list[index].text
+
+    """get quantity of product in cart bubble"""
+    def get_qty(self, index):
+        self.hover_cart_button()
+        products_list = self.driver.find_elements(By.CSS_SELECTOR, "a>label.ng-binding")
+        qty_products_list = products_list[::2]
+        return Decimal(qty_products_list[index].text[5:])
+
+    def get_price_per_qty(self, index):
+        self.hover_cart_button()
+        products_list = self.driver.find_elements(By.CSS_SELECTOR, "[class='price roboto-regular ng-binding']")
+        return Decimal(products_list[index].text[1:])
 
 
