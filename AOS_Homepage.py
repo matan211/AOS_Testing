@@ -17,3 +17,7 @@ class Homepage:
 
     def click_category(self, category):
         self.get_category(category).click()
+
+    """Contact Us heading is unique to the home page"""
+    def get_contact_us(self):
+        return self.driver.find_element(By.CSS_SELECTOR, "h1.roboto-bold").text

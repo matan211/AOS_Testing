@@ -16,3 +16,7 @@ class CategoryPage:
 
     def click_product(self, product_id):
         self.get_product(product_id).click()
+
+    def get_page_title(self):
+        return self.driver.find_element(By.CSS_SELECTOR, "[class='select  ng-binding']").text
+

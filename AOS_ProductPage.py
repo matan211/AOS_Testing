@@ -6,6 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from decimal import Decimal
+from time import sleep
 
 
 class ProductPage:
@@ -57,9 +58,9 @@ class ProductPage:
     """get quantity of product in cart bubble"""
     def get_qty(self, index):
         self.hover_cart_button()
-        products_list = self.driver.find_elements(By.CSS_SELECTOR, "a>label.ng-binding")
         while True:
             try:
+                products_list = self.driver.find_elements(By.CSS_SELECTOR, "a>label.ng-binding")
                 qty_products_list = products_list[::2]
                 return Decimal(qty_products_list[index].text[5:])
             except:
@@ -69,9 +70,13 @@ class ProductPage:
         self.hover_cart_button()
         while True:
             try:
+
                 products_list = self.driver.find_elements(By.CSS_SELECTOR, "[class='price roboto-regular ng-binding']")
                 return Decimal(products_list[index].text[1:])
             except:
                 pass
+
+    def get_name_product_page(self):
+        return self.driver.find_element(By.CSS_SELECTOR, "[class='roboto-regular screen768 ng-binding']").text
 
 

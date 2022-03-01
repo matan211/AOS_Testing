@@ -143,30 +143,97 @@ class MyTestCase(unittest.TestCase):
         self.homepage.click_category('mice')
         """product index 2"""
         self.categorypage.click_product('29')
+        quantity2 = 1
         price2 = self.productpage.get_price_of_one_unit()
+        product_name2 = self.productpage.get_name_product_page()
         """click twice the plus button in quantity field"""
         for i in range(2):
             self.productpage.add_one()
+            quantity2 += 1
         self.productpage.click_add_to_cart()
         self.driver.back()
 
         """product index 1"""
         self.categorypage.click_product('28')
+        quantity1 = 1
+        product_name1 = self.productpage.get_name_product_page()
         price1 = self.productpage.get_price_of_one_unit()
         """click once the plus button in quantity field"""
         self.productpage.add_one()
+        quantity1 += 1
         self.productpage.click_add_to_cart()
         self.driver.back()
 
         """product index 0"""
         self.categorypage.click_product('27')
+        quantity0 = 1
+        product_name0 = self.productpage.get_name_product_page()
         price0 = self.productpage.get_price_of_one_unit()
         self.productpage.click_add_to_cart()
 
+        """checking total order price"""
         self.cartpage.click_cart_button()
         total_order_price = self.cartpage.get_total_order_price()
-        expected_total_price = price2 * 3 + price1 * 2 + price0
+        expected_total_price = price2 * quantity2 + price1 * quantity1 + price0 * quantity0
         self.assertEqual(total_order_price, expected_total_price)
+
+        print(f"Product name: {product_name2}, Quantity: {quantity2}, Price: {price2}")
+        print(f"Product name: {product_name1}, Quantity: {quantity1}, Price: {price1}")
+        print(f"Product name: {product_name0}, Quantity: {quantity0}, Price: {price0}")
+
+    def test_exercise6(self):
+        self.homepage.click_category('mice')
+        """product index 1"""
+        self.categorypage.click_product('29')
+        quantity1 = 1
+        """click twice the plus button in quantity field"""
+        for i in range(2):
+            self.productpage.add_one()
+            quantity1 += 1
+        self.productpage.click_add_to_cart()
+        self.driver.back()
+
+        """product index 0"""
+        self.categorypage.click_product('28')
+        quantity0 = 1
+        """click once the plus button in quantity field"""
+        self.productpage.add_one()
+        quantity0 += 1
+        self.productpage.click_add_to_cart()
+
+        """enter cart page"""
+        self.cartpage.click_cart_button()
+        """click edit button"""
+        self.cartpage.click_edit_button(0)
+        self.productpage.add_one()
+        self.productpage.click_add_to_cart()
+        """enter cart page"""
+        self.cartpage.click_cart_button()
+        """click edit button"""
+        self.cartpage.click_edit_button(1)
+        self.productpage.add_one()
+        self.productpage.click_add_to_cart()
+
+        """enter cart page"""
+        self.cartpage.click_cart_button()
+        new_quantity0 = self.cartpage.get_product_quantity(0)
+        new_quantity1 = self.cartpage.get_product_quantity(1)
+        """checking section"""
+        self.assertEqual(quantity0 + 1, new_quantity0)
+        print(f"product 0: Old qty: {quantity0}, New qty: {new_quantity0}")
+        self.assertEqual(quantity1 + 1, new_quantity1)
+        print(f"product 1: Old qty: {quantity1}, New qty: {new_quantity1}")
+
+    def test_exercise7(self):
+        self.homepage.click_category('tablets')
+        self.categorypage.click_product('16')
+        """"""
+        self.driver.back()
+        page_title = self.categorypage.get_page_title()
+        self.assertEqual(page_title, "TABLETS")
+        self.driver.back()
+        contact_us_heading = self.homepage.get_contact_us()
+        self.assertEqual(contact_us_heading, "CONTACT US")
 
 
     def tearDown(self):

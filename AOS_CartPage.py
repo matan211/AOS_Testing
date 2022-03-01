@@ -32,3 +32,19 @@ class CartPage:
     def get_total_order_price(self):
         element = self.get_total_order_price_locator()
         return Decimal(element.text[1:])
+
+    def get_edit_button(self, index):
+        edit_buttons_list = self.driver.find_elements(By.CLASS_NAME, "edit")
+        return edit_buttons_list[index]
+
+    def click_edit_button(self, index):
+        while True:
+            try:
+                self.get_edit_button(index).click()
+                break
+            except:
+                pass
+
+    def get_product_quantity(self, index):
+        quantity_elements_list = self.driver.find_elements(By.CSS_SELECTOR, "td[class='smollCell quantityMobile']>label.ng-binding")
+        return quantity_elements_list[index].text
