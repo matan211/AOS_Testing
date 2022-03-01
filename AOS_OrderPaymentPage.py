@@ -48,5 +48,11 @@ class OrderPaymentPage:
         return self.driver.find_element(By.CSS_SELECTOR, "article>h3.roboto-regular").text
 
     def get_order_id(self):
-        return self.driver.find_element(By.ID, "orderNumberLabel").text
-
+        order_id_element_text = ''
+        while order_id_element_text == '':
+            try:
+                order_id_element = self.driver.find_element(By.CSS_SELECTOR, "label#orderNumberLabel")
+                order_id_element_text = order_id_element.text
+            except:
+                pass
+        return order_id_element_text

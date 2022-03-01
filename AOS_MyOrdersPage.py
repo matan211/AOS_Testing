@@ -15,7 +15,9 @@ class MyOrdersPage:
         self.wait = WebDriverWait(self.driver, 10)
 
     def get_last_order_number(self):
-        elements_list = self.driver.find_elements(By.CSS_SELECTOR, "tr.ng-scope[data-ng-repeat-start='order in "
-                                                                   "myOrdersCtrl.orders track by $index']>td["
-                                                                   "rowspan='1']>label.ng-binding")
-        return elements_list[len(elements_list) - 4].text
+        while True:
+            try:
+                elements_list = self.driver.find_elements(By.CSS_SELECTOR, 'td>label.ng-binding')
+                return elements_list[-5].text
+            except:
+                pass

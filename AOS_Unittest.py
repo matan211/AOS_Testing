@@ -265,7 +265,6 @@ class MyTestCase(unittest.TestCase):
         self.orderpaymentpage.click_next_button()
         self.orderpaymentpage.type_safePay_username_field('israel12')
         self.orderpaymentpage.type_safePay_password_field('Israel12')
-        sleep(3)
         self.orderpaymentpage.click_pay_now_button()
         """checking section"""
         text_of_recieved_order = self.orderpaymentpage.get_receipt_for_purchase()
@@ -273,26 +272,19 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(text_of_recieved_order, "ORDER PAYMENT")
         """get the order ID from order payment page"""
         orderID = self.orderpaymentpage.get_order_id()
-        print(orderID)
         """checking empty cart after success purchase"""
         self.cartpage.click_cart_button()
-        text_of_continue_shopping_button = self.cartpage.get_continue_shopping_button()
-        # self.assertEqual(text_of_continue_shopping_button, "Your shopping cart is empty")
+        text_of_empty_cart_mesaage = self.cartpage.get_empty_cart_mesaage()
+        self.assertEqual(text_of_empty_cart_mesaage, "Your shopping cart is empty")
         """checking the order exists in user's My Orders"""
         self.homepage.click_user_icon_button()
-        sleep(10)
+        self.wait.until(EC.visibility_of(self.homepage.get_my_orders_button()))
         self.homepage.click_my_orders_button()
-        sleep(5)
         last_order_ID = self.myorderspage.get_last_order_number()
-        print(last_order_ID)
         self.assertEqual(last_order_ID, orderID)
 
-        sleep(20)
-
-
-
-    # def tearDown(self):
-    #     self.driver.close()
+    def tearDown(self):
+        self.driver.close()
 
 
 if __name__ == '__main__':

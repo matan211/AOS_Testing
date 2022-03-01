@@ -55,5 +55,5 @@ class CartPage:
     def click_checkout_button(self):
         self.get_checkout_button().click()
 
-    def get_continue_shopping_button(self):
+    def get_empty_cart_mesaage(self):
         return self.driver.find_element(By.CSS_SELECTOR, ".bigEmptyCart>.roboto-bold").text
