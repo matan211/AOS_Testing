@@ -10,6 +10,9 @@ from time import sleep
 from decimal import Decimal
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from AOS_OrderPaymentPage import OrderPaymentPage
+from AOS_CreateAccountPage import CreateAccountPage
+from AOS_MyOrdersPage import MyOrdersPage
 
 
 
@@ -30,6 +33,9 @@ class MyTestCase(unittest.TestCase):
         self.productpage = ProductPage(self.driver)
         self.cartbubble = CartBubble(self.driver)
         self.cartpage = CartPage(self.driver)
+        self.orderpaymentpage = OrderPaymentPage(self.driver)
+        self.createaccountpage = CreateAccountPage(self.driver)
+        self.myorderspage = MyOrdersPage(self.driver)
 
     def test_exercise1(self):
         expected_total_price = 0
@@ -40,7 +46,6 @@ class MyTestCase(unittest.TestCase):
             expected_total_price += self.productpage.get_price_of_one_unit()
         self.productpage.click_add_to_cart()
         self.driver.back()
-        # sleep(1)
         self.categorypage.click_product('20')
         for i in range(2):
             self.productpage.add_one()
@@ -230,14 +235,64 @@ class MyTestCase(unittest.TestCase):
         """"""
         self.driver.back()
         page_title = self.categorypage.get_page_title()
+        """Path of the Tablets category page"""
         self.assertEqual(page_title, "TABLETS")
         self.driver.back()
         contact_us_heading = self.homepage.get_contact_us()
+        """Contact Us is unique to the home page"""
         self.assertEqual(contact_us_heading, "CONTACT US")
 
+    def test_exercise8(self):
+        """choose product"""
+        self.homepage.click_category('tablets')
+        self.categorypage.click_product('16')
+        self.productpage.click_add_to_cart()
+        """enter cart page"""
+        self.cartpage.click_cart_button()
+        """checkout"""
+        self.cartpage.click_checkout_button()
+        """click registration button"""
+        self.orderpaymentpage.click_registration_button()
+        """registration - create new account"""
+        self.createaccountpage.type_username_field('israel12')
+        self.createaccountpage.type_email_field('israel12@gmail.com')
+        self.createaccountpage.type_password_field('Israel12')
+        self.createaccountpage.type_confirm_password_field('Israel12')
+        self.createaccountpage.click_i_agree_checkbox()
+        self.createaccountpage.click_register_button()
 
-    def tearDown(self):
-        self.driver.close()
+        """order payment with safepay"""
+        self.orderpaymentpage.click_next_button()
+        self.orderpaymentpage.type_safePay_username_field('israel12')
+        self.orderpaymentpage.type_safePay_password_field('Israel12')
+        sleep(3)
+        self.orderpaymentpage.click_pay_now_button()
+        """checking section"""
+        text_of_recieved_order = self.orderpaymentpage.get_receipt_for_purchase()
+        """order payment success"""
+        self.assertEqual(text_of_recieved_order, "ORDER PAYMENT")
+        """get the order ID from order payment page"""
+        orderID = self.orderpaymentpage.get_order_id()
+        print(orderID)
+        """checking empty cart after success purchase"""
+        self.cartpage.click_cart_button()
+        text_of_continue_shopping_button = self.cartpage.get_continue_shopping_button()
+        # self.assertEqual(text_of_continue_shopping_button, "Your shopping cart is empty")
+        """checking the order exists in user's My Orders"""
+        self.homepage.click_user_icon_button()
+        sleep(10)
+        self.homepage.click_my_orders_button()
+        sleep(5)
+        last_order_ID = self.myorderspage.get_last_order_number()
+        print(last_order_ID)
+        self.assertEqual(last_order_ID, orderID)
+
+        sleep(20)
+
+
+
+    # def tearDown(self):
+    #     self.driver.close()
 
 
 if __name__ == '__main__':

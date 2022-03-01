@@ -41,6 +41,7 @@ class ProductPage:
         self.hover_cart_button()
         elements_list = self.driver.find_elements(By.CSS_SELECTOR, "td>span.roboto-medium")
         total_price = elements_list[1].text[1:]
+        """remove , char from number"""
         if total_price[1] == ',':
             total_price = total_price[0]+total_price[2:]
         return Decimal(total_price)

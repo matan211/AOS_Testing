@@ -48,3 +48,12 @@ class CartPage:
     def get_product_quantity(self, index):
         quantity_elements_list = self.driver.find_elements(By.CSS_SELECTOR, "td[class='smollCell quantityMobile']>label.ng-binding")
         return quantity_elements_list[index].text
+
+    def get_checkout_button(self):
+        return self.driver.find_element(By.ID, "checkOutButton")
+
+    def click_checkout_button(self):
+        self.get_checkout_button().click()
+
+    def get_continue_shopping_button(self):
+        return self.driver.find_element(By.CSS_SELECTOR, ".bigEmptyCart>.roboto-bold").text
