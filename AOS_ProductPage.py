@@ -58,12 +58,20 @@ class ProductPage:
     def get_qty(self, index):
         self.hover_cart_button()
         products_list = self.driver.find_elements(By.CSS_SELECTOR, "a>label.ng-binding")
-        qty_products_list = products_list[::2]
-        return Decimal(qty_products_list[index].text[5:])
+        while True:
+            try:
+                qty_products_list = products_list[::2]
+                return Decimal(qty_products_list[index].text[5:])
+            except:
+                pass
 
     def get_price_per_qty(self, index):
         self.hover_cart_button()
-        products_list = self.driver.find_elements(By.CSS_SELECTOR, "[class='price roboto-regular ng-binding']")
-        return Decimal(products_list[index].text[1:])
+        while True:
+            try:
+                products_list = self.driver.find_elements(By.CSS_SELECTOR, "[class='price roboto-regular ng-binding']")
+                return Decimal(products_list[index].text[1:])
+            except:
+                pass
 
 
