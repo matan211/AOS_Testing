@@ -4,6 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from time import sleep
 
 
 class Homepage:
@@ -29,8 +30,33 @@ class Homepage:
         self.get_user_icon_button().click()
 
     def get_my_orders_button(self):
-        elements_list = self.driver.find_elements(By.CSS_SELECTOR, "label.option[translate='My_Orders']")
-        return elements_list[1]
+        while True:
+            try:
+                elements_list = self.driver.find_elements(By.CSS_SELECTOR, "label.option[translate='My_Orders']")
+                return elements_list[1]
+            except:
+                pass
 
     def click_my_orders_button(self):
-        self.get_my_orders_button().click()
+        while True:
+            try:
+                self.get_my_orders_button().click()
+                break
+            except:
+                pass
+
+    def get_sign_out_button(self):
+        """the list has 2 elements. The second one is the sign out button"""
+        elements_list = self.driver.find_elements(By.CSS_SELECTOR, "[translate='Sign_out']")
+        return elements_list[1]
+
+    def click_sign_out_button(self):
+        self.get_sign_out_button().click()
+
+    def get_verify_for_user(self):
+        sleep(3)
+        return self.driver.find_element(By.CSS_SELECTOR, ".hi-user.containMiniTitle").text
+
+
+
+

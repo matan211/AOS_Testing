@@ -46,6 +46,7 @@ class CreateAccountPage:
         return self.driver.find_element(By.NAME, "i_agree")
 
     def click_i_agree_checkbox(self):
+        self.wait.until(EC.element_to_be_clickable(self.get_i_agree_checkbox()))
         self.get_i_agree_checkbox().click()
 
     def get_register_button(self):

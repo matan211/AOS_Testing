@@ -13,8 +13,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from AOS_OrderPaymentPage import OrderPaymentPage
 from AOS_CreateAccountPage import CreateAccountPage
 from AOS_MyOrdersPage import MyOrdersPage
-
-
+from AOS_LoginPopUp import LoginPopUp
 
 
 class MyTestCase(unittest.TestCase):
@@ -36,6 +35,7 @@ class MyTestCase(unittest.TestCase):
         self.orderpaymentpage = OrderPaymentPage(self.driver)
         self.createaccountpage = CreateAccountPage(self.driver)
         self.myorderspage = MyOrdersPage(self.driver)
+        self.loginpopup = LoginPopUp(self.driver)
 
     def test_exercise1(self):
         expected_total_price = 0
@@ -58,8 +58,6 @@ class MyTestCase(unittest.TestCase):
         """goes back to home page"""
         self.driver.back()
         self.driver.back()
-
-
 
     """checks that the products in the cart bubble are same to the chosen products"""
     """checks name, color, quantity, price"""
@@ -109,8 +107,8 @@ class MyTestCase(unittest.TestCase):
         self.driver.back()
         self.driver.back()
 
-
     """checks that the removes product is gone from the cart bubble"""
+
     def test_exercise3(self):
         self.homepage.click_category('speakers')
         """product index 1"""
@@ -247,6 +245,9 @@ class MyTestCase(unittest.TestCase):
         self.homepage.click_category('tablets')
         self.categorypage.click_product('16')
         self.productpage.click_add_to_cart()
+        self.driver.back()
+        self.categorypage.click_product('17')
+        self.productpage.click_add_to_cart()
         """enter cart page"""
         self.cartpage.click_cart_button()
         """checkout"""
@@ -282,6 +283,76 @@ class MyTestCase(unittest.TestCase):
         self.homepage.click_my_orders_button()
         last_order_ID = self.myorderspage.get_last_order_number()
         self.assertEqual(last_order_ID, orderID)
+
+    def test_exercise9(self):
+        """choose two products"""
+        self.homepage.click_category('tablets')
+        self.categorypage.click_product('16')
+        self.productpage.click_add_to_cart()
+        self.driver.back()
+        self.categorypage.click_product('17')
+        self.productpage.click_add_to_cart()
+        """enter cart page"""
+        self.cartpage.click_cart_button()
+        """checkout"""
+        self.cartpage.click_checkout_button()
+        """login to existing account"""
+        self.orderpaymentpage.type_username_field('israel12')
+        self.orderpaymentpage.type_password_field('Israel12')
+        self.orderpaymentpage.get_login_button()
+
+        self.orderpaymentpage.click_next_button()
+        self.orderpaymentpage.get_master_credit_button()
+        """There is edit button for users that already ordered in the past"""
+        try:
+            self.orderpaymentpage.click_edit_button()
+        except:
+            pass
+        """There is bug - user can enter only 12 digits in card number field"""
+        self.orderpaymentpage.type_card_number_field('123412341234')
+        """There is bug. First digit do not enter into the field"""
+        self.orderpaymentpage.type_cvv_field('8971')
+        self.orderpaymentpage.type_card_holder_field('Israel')
+        self.orderpaymentpage.select_year_dropdown('2026')
+        self.orderpaymentpage.select_month_dropdown('08')
+
+        self.orderpaymentpage.click_pay_now_master_credit()
+
+        """get the order ID from order payment page"""
+        orderID = self.orderpaymentpage.get_order_id()
+
+        """checking empty cart after success purchase"""
+        self.cartpage.click_cart_button()
+        text_of_empty_cart_mesaage = self.cartpage.get_empty_cart_mesaage()
+        self.assertEqual(text_of_empty_cart_mesaage, "Your shopping cart is empty")
+
+        """checking the order exists in user's My Orders"""
+        self.homepage.click_user_icon_button()
+        self.wait.until(EC.visibility_of(self.homepage.get_my_orders_button()))
+        self.homepage.click_my_orders_button()
+        last_order_ID = self.myorderspage.get_last_order_number()
+        self.assertEqual(last_order_ID, orderID)
+
+    def test_exercise10(self):
+        self.homepage.click_user_icon_button()
+        expected_user_name = 'israel12'
+        """login"""
+        self.loginpopup.type_login_username_field(expected_user_name)
+        self.loginpopup.type_login_password_field('Israel12')
+        sleep(3)
+        self.loginpopup.click_sign_in_button()
+
+        """checking section"""
+        user_name = self.homepage.get_verify_for_user()
+        self.assertEqual(user_name, expected_user_name)
+
+        """logout"""
+        self.homepage.click_user_icon_button()
+        self.homepage.click_sign_out_button()
+
+        """checking section"""
+        user_name1 = self.homepage.get_verify_for_user()
+        self.assertEqual(user_name1, '')
 
     def tearDown(self):
         self.driver.close()
