@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
-
+from AOS_LoginPopUp import LoginPopUp
 
 class Homepage:
     def __init__(self, driver: webdriver.Chrome):
@@ -54,9 +54,9 @@ class Homepage:
         self.get_sign_out_button().click()
 
     def get_verify_for_user(self):
-        sleep(3)
+        self.wait.until(EC.presence_of_element_located((By.ID, 'menuUser')))
+        sleep(1)
         return self.driver.find_element(By.CSS_SELECTOR, ".hi-user.containMiniTitle").text
-
 
 
 

@@ -339,7 +339,6 @@ class MyTestCase(unittest.TestCase):
         """login"""
         self.loginpopup.type_login_username_field(expected_user_name)
         self.loginpopup.type_login_password_field('Israel12')
-        sleep(3)
         self.loginpopup.click_sign_in_button()
 
         """checking section"""

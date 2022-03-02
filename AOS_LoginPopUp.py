@@ -29,4 +29,9 @@ class LoginPopUp:
         return self.driver.find_element(By.ID, 'sign_in_btnundefined')
 
     def click_sign_in_button(self):
-        self.get_sign_in_button().click()
+        while True:
+            try:
+                self.get_sign_in_button().click()
+                break
+            except:
+                pass
