@@ -1,4 +1,7 @@
 import unittest
+
+from selenium.webdriver.common.by import By
+
 from AOS_Homepage import Homepage
 from AOS_CategoryPage import CategoryPage
 from AOS_ProductPage import ProductPage

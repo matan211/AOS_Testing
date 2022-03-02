@@ -1,22 +1,22 @@
-# from selenium import webdriver
-# from selenium.webdriver.chrome.service import Service
-# from selenium import webdriver
-# from selenium.webdriver.common.by import By
-# from selenium.webdriver.support.ui import WebDriverWait
-# from selenium.webdriver.support import expected_conditions as EC
-# from time import sleep
-# from AOS_Homepage import Homepage
-# from AOS_CategoryPage import CategoryPage
-# from AOS_ProductPage import ProductPage
-# from decimal import Decimal
-# from selenium.webdriver.common.action_chains import ActionChains
-#
-# service_chrome = Service(r"C:\Users\Matan\QA\Drivers\chromedriver.exe")
-# driver = webdriver.Chrome(service=service_chrome)
-# driver.get("http://www.advantageonlineshopping.com/#/")
-# driver.maximize_window()
-# driver.implicitly_wait(10)
-# wait = WebDriverWait(webdriver, 5)
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from time import sleep
+from AOS_Homepage import Homepage
+from AOS_CategoryPage import CategoryPage
+from AOS_ProductPage import ProductPage
+from decimal import Decimal
+from selenium.webdriver.common.action_chains import ActionChains
+
+service_chrome = Service(r"C:\Users\Matan\QA\Drivers\chromedriver.exe")
+driver = webdriver.Chrome(service=service_chrome)
+driver.get("http://www.advantageonlineshopping.com/#/")
+driver.maximize_window()
+driver.implicitly_wait(10)
+wait = WebDriverWait(webdriver, 5)
 #
 # # sleep(3)
 # # product_list = driver.find_elements(By.CLASS_NAME, "productName")
@@ -67,3 +67,7 @@
 # # print(product.get_total_price())
 # # print(type(product.get_total_price()))
 # driver.close()
+productpage = ProductPage(driver)
+# hover = ActionChains(driver).move_to_element(productpage.get_cart_button())
+# hover.perform()
+productpage.hover_cart_button()
