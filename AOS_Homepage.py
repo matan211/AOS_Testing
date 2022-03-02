@@ -27,6 +27,7 @@ class Homepage:
         return self.driver.find_element(By.ID, 'menuUser')
 
     def click_user_icon_button(self):
+        self.wait.until(EC.presence_of_element_located((By.ID, 'menuUser')))
         self.get_user_icon_button().click()
 
     def get_my_orders_button(self):
@@ -54,8 +55,12 @@ class Homepage:
         self.get_sign_out_button().click()
 
     def get_verify_for_user(self):
+        """waiting for invisibility of the sign in button in the login pop up"""
+        self.wait.until(EC.invisibility_of_element(LoginPopUp.get_sign_in_button(self)))
+        """waiting for invisibility of the sign out button in the user menu"""
+        self.wait.until(EC.invisibility_of_element(self.get_sign_out_button()))
+        """waiting for presence of user icon"""
         self.wait.until(EC.presence_of_element_located((By.ID, 'menuUser')))
-        sleep(1)
         return self.driver.find_element(By.CSS_SELECTOR, ".hi-user.containMiniTitle").text
 
 
